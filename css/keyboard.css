@@ -1,0 +1,177 @@
+/* ═══════════════════════════════════════════════════════════════
+   FoldC64 — Keyboard Stylesheet
+   Classic C64 breadbin keyboard styling
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Keyboard View Container (inside the slider panel) */
+.keyboard-view {
+  background-color: var(--c64-brown);
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+/* Keyboard Wrapper — holds main grid + function keys */
+.c64-keyboard {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+  max-width: 1400px;
+  gap: 6px;
+}
+
+/* Main Keys Grid — the 5 rows of keys */
+.c64-main-grid {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 4px;
+}
+
+/* Each keyboard row */
+.c64-row {
+  display: grid;
+  gap: 4px;
+  grid-auto-flow: column;
+  flex: 1;
+  min-height: 0;
+}
+
+/* Row-specific column templates matching C64 key counts */
+/* Row 0: ←  1  2  3  4  5  6  7  8  9  0  +  -  £  CLR/HOME  INST/DEL (16 keys) */
+.c64-row-0 {
+  grid-template-columns: 1fr repeat(13, 1fr) 1.3fr 1.3fr;
+}
+
+/* Row 1: CTRL  Q  W  E  R  T  Y  U  I  O  P  @  *  ↑  RESTORE (15 keys) */
+.c64-row-1 {
+  grid-template-columns: 1.5fr repeat(12, 1fr) 1fr 1.5fr;
+}
+
+/* Row 2: RUN/STOP  SHIFTLK  A  S  D  F  G  H  J  K  L  :  ;  =  RETURN (15 keys) */
+.c64-row-2 {
+  grid-template-columns: 1.5fr 1.3fr repeat(11, 1fr) 1fr 2fr;
+}
+
+/* Row 3: C=  LSHIFT  Z  X  C  V  B  N  M  ,  .  /  RSHIFT  CRSR↕  CRSR↔ (15 keys) */
+.c64-row-3 {
+  grid-template-columns: 1fr 1.8fr repeat(11, 1fr) 1fr 1fr;
+}
+
+/* Row 4: SPACE (1 key — full width) */
+.c64-row-4 {
+  grid-template-columns: 1fr;
+}
+
+/* Function Keys Grid — vertical column on the right */
+.c64-fn-grid {
+  display: flex;
+  flex-direction: column;
+  width: 60px;
+  gap: 4px;
+}
+
+.c64-fn-grid .c64-key {
+  flex: 1;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Base Key Styling
+   ═══════════════════════════════════════════════════════════════ */
+
+.c64-key {
+  background-color: var(--c64-key-beige);
+  border: 1px solid var(--c64-key-border, #3d3121);
+  border-radius: 4px;
+  color: #3d2e1a;
+  font-family: monospace, system-ui;
+  font-weight: bold;
+  font-size: clamp(0.55rem, 1.2vw, 0.85rem);
+  position: relative;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 3px;
+  overflow: hidden;
+
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+
+  /* 3D Raised effect */
+  box-shadow:
+    inset -1px -1px 3px rgba(0, 0, 0, 0.15),
+    inset 1px 1px 3px rgba(255, 255, 255, 0.7),
+    0 3px 4px rgba(0, 0, 0, 0.25);
+
+  transition: transform 0.05s, box-shadow 0.05s;
+  cursor: pointer;
+}
+
+/* Active / Pressed Key State */
+.c64-key:active,
+.c64-key.pressed {
+  transform: translateY(2px) scale(0.96);
+  box-shadow:
+    inset -1px -1px 2px rgba(0, 0, 0, 0.15),
+    inset 1px 1px 2px rgba(255, 255, 255, 0.3),
+    0 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Specific Key Types
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Function keys — dark brown with light text */
+.c64-key.fn-key {
+  background-color: var(--c64-key-dark, #4a3c28);
+  color: var(--c64-key-beige);
+  border-color: #2a2014;
+}
+
+/* Special keys (CTRL, SHIFT, RETURN, RUN/STOP, etc.) */
+.c64-key.special-key {
+  background-color: var(--c64-key-dark, #4a3c28);
+  color: var(--c64-key-beige);
+  border-color: #2a2014;
+}
+
+/* Space bar */
+.c64-key.space-key {
+  min-height: 36px;
+}
+
+/* Shift Lock when locked */
+.c64-key.locked {
+  background-color: #8b7355;
+  box-shadow:
+    inset 0 0 6px rgba(0, 0, 0, 0.3),
+    0 1px 1px rgba(0, 0, 0, 0.2);
+  transform: translateY(2px);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Key Labels
+   ═══════════════════════════════════════════════════════════════ */
+
+.key-label {
+  font-size: inherit;
+  text-align: center;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.key-sublabel {
+  position: absolute;
+  top: 1px;
+  left: 3px;
+  font-size: clamp(0.4rem, 0.7vw, 0.6rem);
+  opacity: 0.6;
+  line-height: 1;
+}

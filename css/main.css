@@ -1,0 +1,329 @@
+/* CSS Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Root variables for C64 theming */
+:root {
+  --c64-blue: #40318d;
+  --c64-light-blue: #7869c4;
+  --c64-bg: #40318d;
+  --c64-brown: #6b5a34;
+  --c64-key-beige: #c8b496;
+  --c64-key-dark: #4a3c28;
+  --c64-key-border: #3d3121;
+}
+
+/* Base Body Styles */
+html, body {
+  overflow: hidden;
+  height: 100dvh;
+  width: 100dvw;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--c64-bg);
+  color: var(--c64-light-blue);
+  font-family: monospace, system-ui;
+  touch-action: none;
+}
+
+/* Main Layout */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  width: 100dvw;
+  overflow: hidden;
+}
+
+#monitor {
+  flex: 1;
+  min-height: 0;   /* Critical: allow flex child to shrink below content size */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #000;
+  position: relative;
+  overflow: hidden;
+}
+
+#controls-panel {
+  flex: 1;
+  min-height: 0;   /* Critical: allow flex child to shrink below content size */
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+#hinge-gap {
+  display: none;
+}
+
+/* Foldable Screen Detection (Dual Screen / Laptop Posture) */
+@media (device-posture: folded) and (vertical-viewport-segments: 2) {
+  .app-container {
+    display: grid;
+    grid-template-rows:
+      env(viewport-segment-height 0 0)
+      calc(env(viewport-segment-top 0 1) - env(viewport-segment-bottom 0 0))
+      env(viewport-segment-height 0 1);
+    grid-template-columns: 100vw;
+  }
+  
+  #monitor {
+    grid-row: 1;
+    flex: none;
+  }
+  
+  #hinge-gap {
+    grid-row: 2;
+    display: block;
+    background-color: #000;
+  }
+  
+  #controls-panel {
+    grid-row: 3;
+    flex: none;
+  }
+}
+
+/* Controls Panel Sliding Logic */
+.controls-slider {
+  display: flex;
+  flex-direction: row;
+  width: 200%; /* Holds both keyboard and joystick views side-by-side */
+  flex: 1;
+  min-height: 0;
+  transition: transform 0.3s ease-in-out;
+}
+
+.controls-slider.slide-to-joystick {
+  transform: translateX(-50%); /* Moves to the second 100% width block */
+}
+
+.keyboard-view,
+.joystick-view {
+  width: 50%; /* 50% of the 200% width container = 100vw */
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Slide Indicator Dots */
+.slide-indicators {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 10;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.3);
+  transition: background-color 0.2s;
+}
+
+.dot.active {
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+/* Settings Overlay */
+#settings-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s ease;
+}
+
+#settings-overlay.hidden {
+  display: none;
+}
+
+.overlay-backdrop {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.overlay-panel {
+  position: relative;
+  background-color: var(--c64-blue);
+  border: 4px solid var(--c64-light-blue);
+  padding: 24px;
+  border-radius: 8px;
+  min-width: 320px;
+  max-width: 90vw;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  color: var(--c64-light-blue);
+  font-family: monospace;
+}
+
+.overlay-title {
+  font-size: 1.2rem;
+  margin-bottom: 16px;
+  text-align: center;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.setting-group {
+  margin-bottom: 16px;
+}
+
+.setting-group h3 {
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.7;
+}
+
+.setting-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.setting-row select,
+.setting-row input[type="range"] {
+  accent-color: var(--c64-light-blue);
+}
+
+.menu-btn {
+  display: block;
+  width: 100%;
+  padding: 10px 16px;
+  margin-bottom: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--c64-light-blue);
+  border: 1px solid var(--c64-light-blue);
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 0.95rem;
+  cursor: pointer;
+  text-align: left;
+}
+
+.menu-btn:active {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.close-btn {
+  margin-top: 12px;
+  text-align: center;
+  font-weight: bold;
+}
+
+/* Controls Toolbar */
+#controls-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 12px;
+  background: rgba(0, 0, 0, 0.3);
+  height: 36px;
+  flex-shrink: 0;
+}
+
+.toolbar-btn {
+  background: transparent;
+  border: 1px solid var(--c64-light-blue);
+  color: var(--c64-light-blue);
+  border-radius: 4px;
+  padding: 4px 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.toolbar-btn:active {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Slide Indicator Dots */
+#slide-indicator {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.3);
+  transition: background-color 0.2s;
+  cursor: pointer;
+}
+
+.dot.active {
+  background-color: rgba(255, 255, 255, 0.85);
+}
+
+/* Loading Screen */
+#loading-screen {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: var(--c64-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  transition: opacity 0.5s ease;
+}
+
+#loading-screen.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.loading-content {
+  text-align: center;
+}
+
+.c64-boot-text {
+  font-family: monospace;
+  font-size: 1.2rem;
+  color: var(--c64-light-blue);
+  letter-spacing: 2px;
+  line-height: 2;
+}
+
+.c64-boot-text .error-text {
+  color: #ff6b6b;
+}
+
+.loading-bar {
+  width: 300px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  margin: 16px auto;
+  overflow: hidden;
+}
+
+.loading-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--c64-light-blue);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+

@@ -1,0 +1,17 @@
+{
+  "name": "foldc64",
+  "version": "1.0.0",
+  "description": "Commodore 64 emulator PWA for Samsung Galaxy Z Fold 8",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "nostalgist": "^0.22.0"
+  },
+  "devDependencies": {
+    "vite": "^6.0.0"
+  }
+}
