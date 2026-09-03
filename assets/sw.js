@@ -6,27 +6,7 @@
  * - Network-first with cache fallback for WASM/ROM files
  */
 
-const CACHE_NAME = 'foldc64-v2';
-
-/**
- * App shell resources to pre-cache on install.
- */
-const APP_SHELL = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/css/main.css',
-  '/css/monitor.css',
-  '/css/keyboard.css',
-  '/css/joystick.css',
-  '/js/app.js',
-  '/js/emulator.js',
-  '/js/keyboard.js',
-  '/js/joystick.js',
-  '/js/storage.js',
-  '/icons/icon-192.svg',
-  '/icons/icon-512.svg',
-];
+const CACHE_NAME = 'foldc64-v3';
 
 /**
  * Patterns that should use network-first strategy.
@@ -41,19 +21,11 @@ const NETWORK_FIRST_PATTERNS = [
   /\.rom$/,
 ];
 
-// ── Install: Pre-cache app shell ─────────────────────────────
+// ── Install ──────────────────────────────────────────────────
 
 self.addEventListener('install', (event) => {
   console.log('[SW] Installing...');
-
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      console.log('[SW] Pre-caching app shell');
-      return cache.addAll(APP_SHELL);
-    })
-  );
-
-  // Activate immediately (don't wait for old service worker to stop)
+  // Skip waiting to activate immediately
   self.skipWaiting();
 });
 
@@ -124,7 +96,7 @@ async function cacheFirstStrategy(request) {
     console.warn('[SW] Network fetch failed for:', request.url);
     // Return a basic offline response for navigation requests
     if (request.mode === 'navigate') {
-      return caches.match('/index.html');
+      return caches.match(new Request(self.registration.scope));
     }
     throw err;
   }
@@ -138,7 +110,6 @@ async function networkFirstStrategy(request) {
   try {
     const response = await fetch(request);
     if (response.ok) {
-      // Cache the response for offline use
       const cache = await caches.open(CACHE_NAME);
       cache.put(request, response.clone());
     }

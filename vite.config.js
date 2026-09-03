@@ -2,6 +2,7 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
   root: '.',
+  base: '/FoldC64/',
   publicDir: 'assets',
   server: {
     host: true,

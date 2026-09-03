@@ -401,7 +401,7 @@ class FoldC64App {
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', async () => {
     try {
-      const registration = await navigator.serviceWorker.register('/sw.js');
+      const registration = await navigator.serviceWorker.register('./sw.js');
       console.log('[FoldC64] Service worker registered:', registration.scope);
     } catch (err) {
       console.warn('[FoldC64] Service worker registration failed:', err);
