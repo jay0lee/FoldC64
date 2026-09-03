@@ -353,8 +353,7 @@ class FoldC64App {
     });
 
     // ── Fullscreen toggle ─────────────────────────────────────
-    const btnFullscreen = document.getElementById('btn-fullscreen');
-    btnFullscreen?.addEventListener('click', () => {
+    const fullscreenHandler = () => {
       if (document.fullscreenElement) {
         document.exitFullscreen();
       } else {
@@ -362,11 +361,20 @@ class FoldC64App {
           console.warn('[FoldC64] Fullscreen request failed:', err);
         });
       }
+    };
+
+    const btnFullscreen = document.getElementById('btn-fullscreen');
+    btnFullscreen?.addEventListener('click', () => {
+      fullscreenHandler();
       // Close settings after toggling
       settingsOverlay.classList.add('hidden');
       settingsOverlay.setAttribute('aria-hidden', 'true');
       this.#emulator?.resume();
     });
+
+    // Toolbar fullscreen button (always visible)
+    const btnFullscreenToolbar = document.getElementById('btn-fullscreen-toolbar');
+    btnFullscreenToolbar?.addEventListener('click', fullscreenHandler);
   }
 
   // ════════════════════════════════════════════════════════════
@@ -410,6 +418,45 @@ if ('serviceWorker' in navigator) {
     }
   });
 }
+
+// PWA Install Prompt
+let deferredPrompt = null;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  console.log('[FoldC64] Install prompt available');
+
+  // Show install banner
+  const banner = document.createElement('div');
+  banner.id = 'install-banner';
+  banner.innerHTML = `
+    <span>📲 Install FoldC64 for fullscreen experience</span>
+    <button id="btn-install">Install</button>
+    <button id="btn-dismiss-install">✕</button>
+  `;
+  document.body.appendChild(banner);
+
+  document.getElementById('btn-install').addEventListener('click', async () => {
+    banner.remove();
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      console.log(`[FoldC64] Install prompt outcome: ${outcome}`);
+      deferredPrompt = null;
+    }
+  });
+
+  document.getElementById('btn-dismiss-install').addEventListener('click', () => {
+    banner.remove();
+  });
+});
+
+window.addEventListener('appinstalled', () => {
+  console.log('[FoldC64] App installed successfully');
+  deferredPrompt = null;
+  document.getElementById('install-banner')?.remove();
+});
 
 // Launch the app
 const app = new FoldC64App();
