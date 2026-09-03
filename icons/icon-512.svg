@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="64" fill="#40318d"/>
+  <rect x="56" y="48" width="400" height="280" rx="16" fill="#1a1334" stroke="#7869c4" stroke-width="6"/>
+  <text x="256" y="210" text-anchor="middle" font-family="monospace" font-size="42" fill="#7869c4">READY.</text>
+  <rect x="256" y="220" width="24" height="34" fill="#7869c4" opacity="0.8"/>
+  <text x="256" y="420" text-anchor="middle" font-family="monospace" font-size="48" font-weight="bold" fill="#c8b496">FoldC64</text>
+  <rect x="80" y="360" width="352" height="8" rx="4" fill="#6b5a34"/>
+</svg>
