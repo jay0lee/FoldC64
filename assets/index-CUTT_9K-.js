@@ -52,4 +52,4 @@ ${f}`);A&&(await((b=p(this,F))==null?void 0:b.loadState(A.trim())),t.classList.a
     <button id="btn-install">Install</button>
     <button id="btn-dismiss-install">✕</button>
   `,document.body.appendChild(e),document.getElementById("btn-install").addEventListener("click",async()=>{if(e.remove(),q){q.prompt();const{outcome:t}=await q.userChoice;console.log(`[FoldC64] Install prompt outcome: ${t}`),q=null}}),document.getElementById("btn-dismiss-install").addEventListener("click",()=>{e.remove()})});window.addEventListener("appinstalled",()=>{var s;console.log("[FoldC64] App installed successfully"),q=null,(s=document.getElementById("install-banner"))==null||s.remove()});const as=new rs;as.init().catch(s=>{console.error("[FoldC64] Fatal initialization error:",s)});
-//# sourceMappingURL=index-BZr0Iv9u.js.map
+//# sourceMappingURL=index-CUTT_9K-.js.map
