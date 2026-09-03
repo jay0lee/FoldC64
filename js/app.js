@@ -352,19 +352,21 @@ class FoldC64App {
       });
     });
 
-    // ── Prevent zoom on double-tap ───────────────────────────
-    document.addEventListener('dblclick', (e) => {
-      e.preventDefault();
-    }, { passive: false });
-
-    // ── Fullscreen on launch (if supported) ──────────────────
-    document.addEventListener('touchstart', () => {
-      if (document.documentElement.requestFullscreen && !document.fullscreenElement) {
-        document.documentElement.requestFullscreen().catch(() => {
-          // Fullscreen request may fail — that's ok
+    // ── Fullscreen toggle ─────────────────────────────────────
+    const btnFullscreen = document.getElementById('btn-fullscreen');
+    btnFullscreen?.addEventListener('click', () => {
+      if (document.fullscreenElement) {
+        document.exitFullscreen();
+      } else {
+        document.documentElement.requestFullscreen().catch((err) => {
+          console.warn('[FoldC64] Fullscreen request failed:', err);
         });
       }
-    }, { once: true });
+      // Close settings after toggling
+      settingsOverlay.classList.add('hidden');
+      settingsOverlay.setAttribute('aria-hidden', 'true');
+      this.#emulator?.resume();
+    });
   }
 
   // ════════════════════════════════════════════════════════════

@@ -59,6 +59,10 @@ export class C64Emulator {
         core: 'vice_x64',
         element: this.#canvas,
         size: 'auto',
+        style: {
+          width: '100%',
+          height: '100%',
+        },
 
         // No ROM to autostart — boot to BASIC prompt
         // rom: undefined,
@@ -151,6 +155,10 @@ export class C64Emulator {
         core: 'vice_x64',
         element: this.#canvas,
         size: 'auto',
+        style: {
+          width: '100%',
+          height: '100%',
+        },
         rom: {
           fileName: file.name,
           fileContent: arrayBuffer,
